@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+
+# Model files
+*.pt
+*.pth
+
+# Uploads
+static/uploads/
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+
+# MongoDB local files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

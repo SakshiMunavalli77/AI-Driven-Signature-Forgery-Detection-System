@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Signature Forgery Detection{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-10 col-lg-8">
+                <div class="row auth-card shadow-lg" data-aos="fade-up">
+                    <!-- Left Side - Form -->
+                    <div class="col-lg-6 p-5">
+                        <div class="text-center mb-4">
+                            <img src="https://img.icons8.com/fluency/64/000000/fingerprint.png" alt="Logo" class="mb-3">
+                            <h2 class="fw-bold">Create Account</h2>
+                            <p class="text-muted">Join us to start analyzing signatures</p>
+                        </div>
+                        
+                        <form method="POST" action="{{ url_for('register') }}" id="registerForm" novalidate>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Username
+                                </label>
+                                <input type="text" class="form-control form-control-lg" 
+                                       id="username" name="username" required 
+                                       minlength="3" maxlength="50"
+                                       placeholder="Choose a username">
+                                <div class="invalid-feedback">
+                                    Username must be at least 3 characters long.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
+                                <input type="email" class="form-control form-control-lg" 
+                                       id="email" name="email" required
+                                       placeholder="your.email@example.com">
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Password
+                                </label>
+                                <input type="password" class="form-control form-control-lg" 
+                                       id="password" name="password" required 
+                                       minlength="6"
+                                       placeholder="At least 6 characters">
+                                <div class="invalid-feedback">
+                                    Password must be at least 6 characters long.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Confirm Password
+                                </label>
+                                <input type="password" class="form-control form-control-lg" 
+                                       id="confirm_password" name="confirm_password" required
+                                       placeholder="Re-enter your password">
+                                <div class="invalid-feedback" id="confirm-feedback">
+                                    Passwords must match.
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" id="registerBtn">
+                                <i class="fas fa-user-plus me-2"></i>Register
+                            </button>
+                            
+                            <div class="text-center">
+                                <p class="text-muted">
+                                    Already have an account? 
+                                    <a href="{{ url_for('login') }}" class="text-primary fw-bold">Login here</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Right Side - Image -->
+                    <div class="col-lg-6 auth-image-side d-none d-lg-block">
+                        <div class="auth-image-content">
+                            <img src="https://img.icons8.com/3d-fluency/200/000000/add-user-male.png" alt="Register" class="mb-4">
+                            <h3 class="text-white mb-3">Join ForensicSign</h3>
+                            <p class="text-white-50">Create an account to access powerful signature verification tools</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function() {
+        'use strict';
+        
+        const form = document.getElementById('registerForm');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const registerBtn = document.getElementById('registerBtn');
+        
+        // Password match validation
+        confirmPassword.addEventListener('input', function() {
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        });
+        
+        password.addEventListener('input', function() {
+            if (confirmPassword.value !== '') {
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity('Passwords do not match');
+                } else {
+                    confirmPassword.setCustomValidity('');
+                }
+            }
+        });
+        
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                // Show loading state
+                registerBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+                registerBtn.disabled = true;
+            }
+            
+            form.classList.add('was-validated');
+        }, false);
+    })();
+</script>
+{% endblock %}

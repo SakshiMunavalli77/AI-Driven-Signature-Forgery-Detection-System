@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Signature Forgery Detection{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="https://img.icons8.com/fluency/48/signature.png" alt="logo"/>
+                    <span>ForensicSign</span>
+                </div>
+                
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                        <img src="https://img.icons8.com/fluency/24/home.png" alt="home"/> Home
+                    </a></li>
+                    
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('predict') }}" class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}">
+                            <img src="https://img.icons8.com/fluency/24/search.png" alt="predict"/> Analyze
+                        </a></li>
+                        <li><a href="{{ url_for('history') }}" class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">
+                            <img src="https://img.icons8.com/fluency/24/time-machine.png" alt="history"/> History
+                        </a></li>
+                        
+                        <li class="dropdown">
+                            <a href="#" class="nav-link user-dropdown">
+                                <img src="https://img.icons8.com/fluency/24/user-male-circle.png" alt="user"/>
+                                {{ current_user.username }}
+                                <i class="fas fa-chevron-down"></i>
+                            </a>
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('logout') }}">
+                                    <img src="https://img.icons8.com/fluency/20/exit.png" alt="logout"/> Logout
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+                            <img src="https://img.icons8.com/fluency/24/login-rounded-right.png" alt="login"/> Login
+                        </a></li>
+                        <li><a href="{{ url_for('register') }}" class="btn-register">
+                            <img src="https://img.icons8.com/fluency/20/add-user-male.png" alt="register"/> Register
+                        </a></li>
+                    {% endif %}
+                </ul>
+                
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} fade-in">
+                        <span>{{ message }}</span>
+                        <button class="close-alert">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

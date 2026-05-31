@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Signature Forgery Detection{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="hero-text animate-fade-in">
+            <h1 class="hero-title">
+                <img src="https://img.icons8.com/fluency/64/shield.png" alt="shield"/>
+                Signature Forgery Detection
+            </h1>
+            <p class="hero-subtitle">Advanced AI-Powered Forensic Analysis</p>
+            <p class="hero-description">
+                Leveraging cutting-edge deep learning technology to detect signature forgeries 
+                with unprecedented accuracy. Protect your documents with forensic-grade verification.
+            </p>
+            <div class="hero-buttons">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                        <img src="https://img.icons8.com/fluency/24/search.png" alt="analyze"/> 
+                        Start Analysis
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                        <img src="https://img.icons8.com/fluency/24/add-user-male.png" alt="register"/> 
+                        Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">
+                        <img src="https://img.icons8.com/fluency/24/login-rounded-right.png" alt="login"/> 
+                        Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="hero-pattern"></div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">
+            <img src="https://img.icons8.com/fluency/48/star.png" alt="star"/> 
+            Why Choose ForensicSign?
+        </h2>
+        
+        <div class="features-grid">
+            <div class="feature-card animate-slide-up">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/artificial-intelligence.png" alt="AI"/>
+                </div>
+                <h3>AI-Powered Detection</h3>
+                <p>Utilizes Siamese Neural Networks and deep learning algorithms trained on thousands of signatures for superior accuracy.</p>
+            </div>
+            
+            <div class="feature-card animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/speed.png" alt="speed"/>
+                </div>
+                <h3>Instant Analysis</h3>
+                <p>Get results in seconds with our optimized processing pipeline. Real-time verification for immediate decision making.</p>
+            </div>
+            
+            <div class="feature-card animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/accuracy.png" alt="accuracy"/>
+                </div>
+                <h3>High Accuracy</h3>
+                <p>Achieve forensic-grade accuracy with our state-of-the-art model trained on diverse signature datasets.</p>
+            </div>
+            
+            <div class="feature-card animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/lock.png" alt="security"/>
+                </div>
+                <h3>Secure & Private</h3>
+                <p>Your data is encrypted and protected. All analyses are confidential and stored securely in our database.</p>
+            </div>
+            
+            <div class="feature-card animate-slide-up" style="animation-delay: 0.4s;">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/time-machine.png" alt="history"/>
+                </div>
+                <h3>Complete History</h3>
+                <p>Track all your analyses with detailed reports and historical data for comprehensive record-keeping.</p>
+            </div>
+            
+            <div class="feature-card animate-slide-up" style="animation-delay: 0.5s;">
+                <div class="feature-icon">
+                    <img src="https://img.icons8.com/fluency/96/graph.png" alt="insights"/>
+                </div>
+                <h3>Detailed Insights</h3>
+                <p>Receive comprehensive analysis reports with confidence scores and similarity metrics for forensic evidence.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-image animate-slide-right">
+                <img src="https://img.icons8.com/fluency/400/detective.png" alt="forensics"/>
+            </div>
+            <div class="about-text animate-slide-left">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/info.png" alt="info"/> 
+                    About Signature Forgery
+                </h2>
+                <p class="lead">Signature forgery is a serious crime involving the unauthorized reproduction or imitation of another person's signature.</p>
+                
+                <div class="info-box">
+                    <h3><img src="https://img.icons8.com/fluency/32/warning-shield.png" alt="warning"/> Types of Forgery</h3>
+                    <ul>
+                        <li><strong>Random Forgery:</strong> No attempt to replicate the genuine signature</li>
+                        <li><strong>Simple Forgery:</strong> Basic attempt without practice</li>
+                        <li><strong>Skilled Forgery:</strong> Practiced imitation after studying the original</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3><img src="https://img.icons8.com/fluency/32/scales.png" alt="legal"/> Legal Implications</h3>
+                    <p>Signature forgery can lead to serious legal consequences including fraud charges, identity theft, and financial crimes. Organizations and individuals must verify signature authenticity to prevent fraudulent transactions.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h3><img src="https://img.icons8.com/fluency/32/how-to.png" alt="how"/> How We Help</h3>
+                    <p>Our AI-powered system compares signature pairs using advanced neural networks, analyzing subtle features that human eyes might miss. The system calculates a dissimilarity score to determine if signatures match or if forgery is detected.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="section-title">
+            <img src="https://img.icons8.com/fluency/48/gears.png" alt="gears"/> 
+            How It Works
+        </h2>
+        
+        <div class="steps">
+            <div class="step animate-fade-in">
+                <div class="step-number">1</div>
+                <div class="step-icon">
+                    <img src="https://img.icons8.com/fluency/96/upload.png" alt="upload"/>
+                </div>
+                <h3>Upload Signatures</h3>
+                <p>Upload two signature images - the reference signature and the signature to verify</p>
+            </div>
+            
+            <div class="step-arrow">→</div>
+            
+            <div class="step animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="step-number">2</div>
+                <div class="step-icon">
+                    <img src="https://img.icons8.com/fluency/96/process.png" alt="process"/>
+                </div>
+                <h3>AI Analysis</h3>
+                <p>Our neural network processes both signatures and extracts unique features</p>
+            </div>
+            
+            <div class="step-arrow">→</div>
+            
+            <div class="step animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="step-number">3</div>
+                <div class="step-icon">
+                    <img src="https://img.icons8.com/fluency/96/bar-chart.png" alt="results"/>
+                </div>
+                <h3>Get Results</h3>
+                <p>Receive detailed analysis with confidence score and forgery detection verdict</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2><img src="https://img.icons8.com/fluency/48/rocket.png" alt="rocket"/> Ready to Detect Forgeries?</h2>
+            <p>Join thousands of users protecting their documents with AI-powered forensic analysis</p>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="btn btn-cta">
+                    <img src="https://img.icons8.com/fluency/24/add-user-male.png" alt="register"/> 
+                    Create Free Account
+                </a>
+            {% else %}
+                <a href="{{ url_for('predict') }}" class="btn btn-cta">
+                    <img src="https://img.icons8.com/fluency/24/search.png" alt="analyze"/> 
+                    Start Your First Analysis
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

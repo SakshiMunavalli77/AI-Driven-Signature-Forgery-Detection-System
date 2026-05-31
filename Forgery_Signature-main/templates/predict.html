@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze Signatures - Signature Forgery Detection{% endblock %}
+
+{% block content %}
+<section class="predict-section">
+    <div class="container">
+        <div class="page-header animate-fade-in">
+            <h1>
+                <img src="https://img.icons8.com/fluency/48/search.png" alt="search"/> 
+                Signature Analysis
+            </h1>
+            <p>Upload two signature images to detect forgery using our AI-powered system</p>
+        </div>
+        
+        {% if not result %}
+        <div class="upload-wrapper animate-slide-up">
+            <div class="upload-card">
+                <form method="POST" enctype="multipart/form-data" id="upload-form">
+                    <div class="upload-grid">
+                        <div class="upload-box">
+                            <div class="upload-icon">
+                                <img src="https://img.icons8.com/fluency/96/upload-to-cloud.png" alt="upload"/>
+                            </div>
+                            <h3>Reference Signature</h3>
+                            <p>Upload the original/reference signature</p>
+                            <input type="file" id="signature1" name="signature1" accept="image/*" required hidden>
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('signature1').click()">
+                                <img src="https://img.icons8.com/fluency/20/folder-invoices.png" alt="browse"/> 
+                                Choose File
+                            </button>
+                            <div class="file-name" id="file1-name"></div>
+                            <div class="preview-container" id="preview1"></div>
+                        </div>
+                        
+                        <div class="vs-divider">
+                            <span>VS</span>
+                        </div>
+                        
+                        <div class="upload-box">
+                            <div class="upload-icon">
+                                <img src="https://img.icons8.com/fluency/96/upload-to-cloud.png" alt="upload"/>
+                            </div>
+                            <h3>Test Signature</h3>
+                            <p>Upload the signature to verify</p>
+                            <input type="file" id="signature2" name="signature2" accept="image/*" required hidden>
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('signature2').click()">
+                                <img src="https://img.icons8.com/fluency/20/folder-invoices.png" alt="browse"/> 
+                                Choose File
+                            </button>
+                            <div class="file-name" id="file2-name"></div>
+                            <div class="preview-container" id="preview2"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-actions">
+                        <button type="submit" class="btn btn-primary btn-lg" id="analyze-btn" disabled>
+                            <img src="https://img.icons8.com/fluency/24/process.png" alt="analyze"/> 
+                            Analyze Signatures
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="resetForm()">
+                            <img src="https://img.icons8.com/fluency/20/refresh.png" alt="reset"/> 
+                            Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="tips-card">
+                <h3><img src="https://img.icons8.com/fluency/32/info.png" alt="tips"/> Upload Tips</h3>
+                <ul>
+                    <li><img src="https://img.icons8.com/fluency/20/checkmark.png" alt="check"/> Use clear, high-resolution images</li>
+                    <li><img src="https://img.icons8.com/fluency/20/checkmark.png" alt="check"/> Ensure good lighting and contrast</li>
+                    <li><img src="https://img.icons8.com/fluency/20/checkmark.png" alt="check"/> Signature should be centered</li>
+                    <li><img src="https://img.icons8.com/fluency/20/checkmark.png" alt="check"/> Accepted formats: PNG, JPG, JPEG</li>
+                    <li><img src="https://img.icons8.com/fluency/20/checkmark.png" alt="check"/> Maximum file size: 16MB</li>
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        <!-- Results Section -->
+        <div class="results-wrapper animate-fade-in">
+            <div class="result-header">
+                <div class="result-status {{ 'genuine' if result.is_genuine else 'forged' }}">
+                    {% if result.is_genuine %}
+                        <img src="https://img.icons8.com/fluency/96/verified-badge.png" alt="verified"/>
+                        <h2>Genuine Signature</h2>
+                        <p>The signatures appear to match</p>
+                    {% else %}
+                        <img src="https://img.icons8.com/fluency/96/high-priority.png" alt="warning"/>
+                        <h2>Forgery Detected</h2>
+                        <p>The signatures do not match</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="result-images">
+                <div class="result-image-box">
+                    <h3>Reference Signature</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + image1) }}" alt="Signature 1">
+                </div>
+                <div class="result-image-box">
+                    <h3>Test Signature</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + image2) }}" alt="Signature 2">
+                </div>
+            </div>
+            
+            <div class="result-metrics">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <img src="https://img.icons8.com/fluency/48/graph.png" alt="distance"/>
+                    </div>
+                    <h4>Euclidean Distance</h4>
+                    <p class="metric-value">{{ result.distance }}</p>
+                    <small>Lower values indicate similarity</small>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <img src="https://img.icons8.com/fluency/48/accuracy.png" alt="confidence"/>
+                    </div>
+                    <h4>Confidence Score</h4>
+                    <p class="metric-value">{{ result.confidence }}%</p>
+                    <div class="confidence-bar">
+                       <div class="confidence-fill"
+     style="width: {{ result.confidence if result and result.confidence else 0 }}%;">
+</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <img src="https://img.icons8.com/fluency/48/{% if result.is_genuine %}checkmark{% else %}cancel{% endif %}.png" alt="verdict"/>
+                    </div>
+                    <h4>Final Verdict</h4>
+                    <p class="metric-value {{ 'genuine-text' if result.is_genuine else 'forged-text' }}">
+                        {{ result.result }}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="result-actions">
+                <a href="{{ url_for('predict') }}" class="btn btn-primary">
+                    <img src="https://img.icons8.com/fluency/20/plus.png" alt="new"/> 
+                    New Analysis
+                </a>
+                <a href="{{ url_for('history') }}" class="btn btn-secondary">
+                    <img src="https://img.icons8.com/fluency/20/time-machine.png" alt="history"/> 
+                    View History
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// File input handlers
+document.getElementById('signature1').addEventListener('change', function(e) {
+    handleFileSelect(e, 'file1-name', 'preview1');
+    checkBothFiles();
+});
+
+document.getElementById('signature2').addEventListener('change', function(e) {
+    handleFileSelect(e, 'file2-name', 'preview2');
+    checkBothFiles();
+});
+
+function handleFileSelect(event, nameId, previewId) {
+    const file = event.target.files[0];
+    if (file) {
+        // Display file name
+        document.getElementById(nameId).textContent = file.name;
+        
+        // Display preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function checkBothFiles() {
+    const file1 = document.getElementById('signature1').files.length;
+    const file2 = document.getElementById('signature2').files.length;
+    const analyzeBtn = document.getElementById('analyze-btn');
+    
+    if (file1 > 0 && file2 > 0) {
+        analyzeBtn.disabled = false;
+    } else {
+        analyzeBtn.disabled = true;
+    }
+}
+
+function resetForm() {
+    document.getElementById('file1-name').textContent = '';
+    document.getElementById('file2-name').textContent = '';
+    document.getElementById('preview1').innerHTML = '';
+    document.getElementById('preview2').innerHTML = '';
+    document.getElementById('analyze-btn').disabled = true;
+}
+
+// Form submission with loading state
+document.getElementById('upload-form').addEventListener('submit', function() {
+    const btn = document.getElementById('analyze-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+    btn.disabled = true;
+});
+</script>
+{% endblock %}
